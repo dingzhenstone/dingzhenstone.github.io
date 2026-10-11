@@ -1,0 +1,6 @@
+# 仓库内统一 LF (CI 在 Linux 上跑), 二进制类型显式声明
+* text=auto eol=lf
+*.jpg  binary
+*.png  binary
+*.woff2 binary
+*.woff  binary

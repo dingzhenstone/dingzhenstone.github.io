@@ -1,0 +1,21 @@
+# j3rk —— Miuix 设计规范 (compose-miuix-ui/miuix)
+# 配色默认用规范里的固定值 (docs/zh_CN/guide/colors.md), 见 source/css/miuix.css
+
+# 明暗: system | light | dark  (对应 ThemeController 的 ColorSchemeMode)
+theme_mode: system
+
+# Monet 动态取色 (Miuix 的 Monet 模式): 关 = 固定规范色板
+monet: false
+
+# Monet 开启时用的种子色 (Miuix 默认 keyColor)
+seed_color: "#3482FF"
+
+# 字体与图标全部本地: MiSans 子集 + 内联 SVG, 无外网依赖
+
+# 导航
+menu:
+  首页: /
+  归档: /archives/
+  关于: /about/
+
+footer: "© 2026 j3rk0ff"
