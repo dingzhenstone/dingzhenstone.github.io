@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="<%= config.language || 'zh-CN' %>"
+      data-mode="<%= theme.theme_mode || 'system' %>"
+      data-monet="<%= theme.monet ? 'true' : 'false' %>"
+      data-seed="<%= theme.seed_color || '#3482FF' %>"
+      data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title><%= page.title ? page.title + ' · ' + config.title : config.title %></title>
+  <meta name="generator" content="Hexo">
+
+  <!-- 预绘制解析明暗 (Miuix ThemeController: System/Light/Dark), 避免首帧闪白 -->
+  <script>
+    (function () {
+      var d = document.documentElement, m = d.dataset.mode, saved = null;
+      try { saved = localStorage.getItem('j3rk-theme'); } catch (e) {}
+      if (saved === 'light' || saved === 'dark') m = saved;
+      d.dataset.theme = (m === 'dark' ||
+        (m !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) ? 'dark' : 'light';
+    })();
+  </script>
+
+  <link rel="stylesheet" href="<%- url_for('/css/misans.css') %>">
+  <link rel="stylesheet" href="<%- url_for('/css/miuix.css') %>">
+  <script type="module" src="<%- url_for('/js/j3rk.js') %>"></script>
+</head>
+<body>
+  <header class="ab" id="ab">
+    <div class="ab-large" id="ab-large">
+      <h1 class="ab-large-title"><%= config.title %></h1>
+      <% if (config.subtitle) { %><p class="ab-large-sub"><%= config.subtitle %></p><% } %>
+    </div>
+    <div class="ab-bar">
+      <span class="ab-bar-title"><%= config.title %></span>
+      <nav class="ab-actions">
+        <% Object.keys(theme.menu || {}).forEach(function(name){ %>
+          <a class="btn navlink" href="<%- url_for(theme.menu[name]) %>"><%= name %></a>
+        <% }) %>
+        <button class="iconbtn" id="theme-toggle" type="button" title="明暗" aria-label="切换明暗">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container"><%- body %></main>
+
+  <footer class="foot"><%- theme.footer || '' %></footer>
+
+  <button class="totop" id="to-top" type="button" title="回到顶部" aria-label="回到顶部" hidden>
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+      <path d="M12 5.5 4.6 12.9l1.4 1.4L11 9.3V19h2V9.3l5 5 1.4-1.4Z" fill="currentColor"/>
+    </svg>
+  </button>
+</body>
+</html>

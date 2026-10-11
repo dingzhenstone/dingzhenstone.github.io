@@ -1,0 +1,303 @@
+/* ============================================================================
+   j3rk —— Miuix 设计规范
+   标准来源: compose-miuix-ui/miuix (Apache-2.0)
+     theme/Colors.kt · theme/TextStyles.kt
+     basic/{Scaffold,Card,Button,IconButton,TopAppBar,Divider}.kt
+   浅/深色数值 = 仓库 docs/zh_CN/guide/colors.md 的表
+   ========================================================================== */
+
+:root{
+  /* ---- 颜色 (浅色) ---- */
+  --primary:#3482FF;               --on-primary:#FFFFFF;
+  --primary-variant:#3482FF;       --on-primary-variant:#AECDFF;
+  --primary-container:#5D9BFF;     --on-primary-container:#FFFFFF;
+  --tertiary-container:#EAF2FF;    --on-tertiary-container:#3482FF;
+  --secondary:#E6E6E6;             --on-secondary:#FFFFFF;
+  --secondary-variant:#F0F0F0;     --on-secondary-variant:#303030;   /* 按钮默认配色 */
+  --secondary-container:#F0F0F0;   --on-secondary-container:#A9A9A9;
+  --error:#E94634;                 --on-error:#FFFFFF;
+  --background:#FFFFFF;            --on-background:#000000;
+  --on-background-variant:#8C93B0;          /* 次级文本: 那个标志性的蓝灰 */
+  --surface:#F7F7F7;               --on-surface:#000000;
+  --surface-variant:#FFFFFF;
+  --on-surface-secondary:rgba(0,0,0,.8);    /* onSurfaceSecondary  #CC000000 */
+  --on-surface-summary:rgba(0,0,0,.6);      /* onSurfaceVariantSummary */
+  --on-surface-actions:rgba(0,0,0,.4);      /* onSurfaceVariantActions */
+  --disabled-on-surface:#B2B2B2;
+  --surface-container:#FFFFFF;     --on-surface-container:#000000;
+  --on-surface-container-variant:#959595;
+  --surface-container-high:#E8E8E8;--on-surface-container-high:#A2A2A2;
+  --surface-container-highest:#E8E8E8; --on-surface-container-highest:#000000;
+  --outline:#D9D9D9;               --divider:#E0E0E0;
+  --window-dimming:rgba(0,0,0,.30);
+
+  /* ---- 形状 / 尺寸 ----
+     CardDefaults / ButtonDefaults / IconButtonDefaults / TopAppBarDefaults */
+  --radius-card:16px;              /* CardDefaults.CornerRadius */
+  --radius-btn:16px;               /* ButtonDefaults.CornerRadius */
+  --radius-icon:40px;              /* IconButtonDefaults.CornerRadius (正圆) */
+  --btn-min-h:40px;                /* ButtonDefaults.MinHeight */
+  --btn-pad-x:16px;                /* ButtonDefaults.InsideMargin.horizontal */
+  --icon-size:40px;                /* IconButtonDefaults.MinWidth/MinHeight */
+  --divider-w:0.75px;              /* DividerDefaults.Thickness */
+
+  --ab-collapsed-h:52px;           /* TopAppBarDefaults.CollapsedHeight */
+  --ab-small-h:50px;               /* SmallTopAppBarCenterHeight */
+  --ab-title-pad:26px;             /* TitlePadding */
+  --ab-icon-pad:16px;              /* NavigationIconPadding / ActionIconPadding */
+  --ab-large-pad-bottom:4px;       /* LargeTitleBottomPadding */
+  --ab-sub-pad-bottom:8px;         /* SubtitleBottomPadding */
+  --ab-blur:25px;                  /* miuix-blur 示例取值 */
+
+  /* ---- 字体 ---- */
+  --font:"MiSans",system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"Cascadia Code","JetBrains Mono",Consolas,monospace;
+
+  --maxw:860px;
+  --gutter:16px;                   /* 内容列左右留白 (.container 的 padding) */
+  /* 顶栏左右边距: 既满足规范的 26/16, 宽屏时又和内容列对齐 */
+  --ab-side:max(var(--ab-title-pad), calc((100% - var(--maxw)) / 2 + var(--gutter)));
+  --ab-side-end:max(var(--ab-icon-pad), calc((100% - var(--maxw)) / 2 + var(--gutter)));
+}
+
+html[data-theme="dark"]{
+  --primary:#277AF7;               --on-primary:#FFFFFF;
+  --primary-variant:#0073DD;       --on-primary-variant:#99C7F1;
+  --primary-container:#338FE4;     --on-primary-container:#FFFFFF;
+  --tertiary-container:#2B3B54;    --on-tertiary-container:#4788FF;
+  --secondary:#505050;             --secondary-container:#434343; --on-secondary-container:#7C7C7C;
+  --secondary-variant:#434343;     --on-secondary-variant:#D9D9D9;
+  --error:#F12522;
+  --background:#242424;            --on-background:rgba(255,255,255,.9);
+  --on-background-variant:#787E96;
+  --surface:#000000;               --on-surface:#F2F2F2;
+  --surface-variant:#242424;
+  --on-surface-secondary:rgba(255,255,255,.8);
+  --on-surface-summary:rgba(255,255,255,.5);
+  --on-surface-actions:rgba(255,255,255,.4);
+  --disabled-on-surface:#666666;
+  --surface-container:#242424;     --on-surface-container:rgba(255,255,255,.9);
+  --on-surface-container-variant:#737373;
+  --surface-container-high:#242424;--on-surface-container-high:#666666;
+  --surface-container-highest:#2D2D2D; --on-surface-container-highest:#E9E9E9;
+  --outline:#404040;               --divider:#393939;
+  --window-dimming:rgba(0,0,0,.60);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--surface); color:var(--on-surface);
+  font-family:var(--font); font-size:17px;      /* TextStyles.main */
+  line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--primary); text-decoration:none}
+img{max-width:100%; height:auto}
+
+/* ---- 超椭圆: Miuix SquirclePath 的控制点是 0.643 (≈ superellipse 4) ----
+   支持 corner-shape 的浏览器得到连续曲率圆角, 不支持的退回普通圆角 */
+.card,.btn,.panel,.field{border-radius:var(--radius-card)}
+@supports (corner-shape:squircle){ .card,.btn,.panel,.field{corner-shape:squircle} }
+@supports (corner-shape:superellipse(4)){ .card,.btn,.panel,.field{corner-shape:superellipse(4)} }
+
+/* ============================ Top app bar ============================
+   结构: [ 大标题区 ][ 折叠条 52px ] —— 整块 sticky, 上移大标题区的高度,
+   滚动时大标题自然移出视口, 折叠条停在顶部 (等价于 Compose 的 heightOffset) */
+.ab{
+  position:sticky; top:calc(-1 * var(--ab-large-h,70px)); z-index:50;
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:blur(var(--ab-blur)) saturate(1.6);
+  -webkit-backdrop-filter:blur(var(--ab-blur)) saturate(1.6);
+  border-bottom:var(--divider-w) solid transparent;
+  transition:border-color .2s ease;
+}
+.ab.is-scrolled{border-bottom-color:var(--divider)}
+
+.ab-large{
+  padding:14px var(--ab-side) var(--ab-sub-pad-bottom) var(--ab-side);
+}
+.ab-large-title{
+  margin:0; font-size:32px; font-weight:400; line-height:1.2;  /* TextStyles.Title1 */
+  color:var(--on-surface);
+}
+.ab-large-sub{
+  margin:0; padding-top:var(--ab-large-pad-bottom);
+  font-size:14px; line-height:1.4;                             /* TextStyles.Body2 */
+  color:var(--on-surface-summary);
+}
+
+.ab-bar{
+  display:flex; align-items:center; min-height:var(--ab-collapsed-h);
+  padding-left:var(--ab-side); padding-right:var(--ab-side-end);
+}
+.ab-bar-title{
+  font-size:20px; font-weight:500;                             /* TextStyles.Title3 */
+  color:var(--on-surface); white-space:nowrap;
+  opacity:clamp(0, calc((var(--p,0) - .55) * 2.5), 1);          /* 随折叠淡入 */
+}
+.ab-actions{margin-inline-start:auto; display:flex; align-items:center; gap:4px}
+
+/* 图标按钮: IconButtonDefaults 40×40, 正圆 */
+.iconbtn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:var(--icon-size); height:var(--icon-size); flex:0 0 auto;
+  border:0; border-radius:var(--radius-icon); cursor:pointer;
+  background:transparent; color:var(--on-surface);
+  transition:background .15s ease;
+}
+.iconbtn:hover{background:var(--secondary-container)}
+.iconbtn:active{background:var(--surface-container-high)}
+
+/* 文字按钮: ButtonDefaults (≥40 高, 圆角 16, 左右 16) */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  min-width:58px; min-height:var(--btn-min-h); padding:0 var(--btn-pad-x);
+  font-size:17px; font-family:var(--font); cursor:pointer;
+  background:var(--secondary-variant); color:var(--on-secondary-variant); border:0;
+}
+.btn:hover{background:var(--surface-container-high)}
+.btn-primary{background:var(--primary); color:var(--on-primary)}
+.btn-primary:hover{background:var(--primary-variant)}
+
+/* ============================ 布局 ============================ */
+.container{max-width:var(--maxw); margin:0 auto; padding:16px 16px 72px}
+
+/* ============================ 卡片 ============================
+   CardDefaults: 圆角 16, 色 = surfaceContainer / onSurfaceContainer */
+.card{
+  display:block; position:relative; padding:16px 18px;
+  background:var(--surface-container); color:var(--on-surface-container);
+  transition:background .18s ease, transform .18s ease;
+}
+a.card:hover{background:var(--surface-container-high); text-decoration:none}
+a.card:active{transform:scale(.985)}
+a.card *{pointer-events:none}
+a.card .chip{pointer-events:auto}
+
+.cards{display:grid; grid-template-columns:1fr; gap:12px}
+@media(min-width:720px){.cards{grid-template-columns:1fr 1fr}}
+.cards > :last-child:nth-child(odd){grid-column:1 / -1}
+
+.card-title{margin:0 0 6px; font-size:18px; font-weight:400; line-height:1.4; color:var(--on-surface)}  /* Title4 */
+.card-meta{margin:0 0 8px; font-size:14px; color:var(--on-background-variant)}                          /* Body2 */
+.card-excerpt{margin:0; font-size:14px; line-height:1.55; color:var(--on-surface-summary)}              /* Body2 */
+
+/* ============================ 文章 ============================ */
+.article{padding:22px 24px 28px}
+.article-title{margin:0 0 10px; font-size:32px; font-weight:400; line-height:1.25; letter-spacing:-.2px}  /* Title1 */
+.article-meta{display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  font-size:13px; color:var(--on-background-variant); margin-bottom:16px}                                /* Footnote1 */
+.mi{display:inline-flex; align-items:center; margin-inline-end:5px; color:var(--on-background-variant)}
+
+/* 标签 = secondaryContainer 灰片 */
+.chip{
+  display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px;
+  font-size:12px; line-height:1.5;
+  background:var(--tertiary-container); color:var(--on-tertiary-container);
+}
+.chip:hover{background:var(--primary-container); color:var(--on-primary-container); text-decoration:none}
+
+/* 正文: Paragraph (17px), 行高放宽到 1.7 —— 中长文可读性, 见 README "与规范的偏差" */
+.post-body{font-size:17px; line-height:1.7; color:var(--on-surface)}
+.post-body > :first-child{margin-top:0}
+.post-body h2{margin:32px 0 10px; font-size:24px; font-weight:400; line-height:1.4}   /* Title2 */
+.post-body h3{margin:24px 0 8px; font-size:20px; font-weight:400}                     /* Title3 */
+.post-body h4{margin:20px 0 6px; font-size:18px; font-weight:400}                     /* Title4 */
+.post-body img{border-radius:var(--radius-card)}
+
+/* 图片与图注 (figure.highlight 是代码块, 用 :not 排除掉) */
+.post-body figure:not(.highlight){margin:20px 0; text-align:center}
+.post-body figure:not(.highlight) img{display:block; margin:0 auto}
+.post-body figcaption{margin-top:10px; font-size:13px; line-height:1.5; color:var(--on-background-variant)}
+.post-body a{text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px}
+.post-body ul,.post-body ol{padding-inline-start:22px}
+.post-body li{margin:4px 0}
+.post-body hr{border:0; border-top:var(--divider-w) solid var(--divider); margin:28px 0}
+.post-body blockquote{
+  margin:16px 0; padding:12px 16px; border-radius:var(--radius-card);
+  background:var(--tertiary-container); color:var(--on-tertiary-container);
+}
+.post-body blockquote p{margin:0}
+.post-body table{border-collapse:collapse; width:100%; display:block; overflow-x:auto; font-size:15px}
+.post-body th,.post-body td{padding:9px 12px; text-align:left;
+  border-bottom:var(--divider-w) solid var(--divider)}
+.post-body th{font-weight:400; color:var(--on-surface-summary)}
+
+/* ---- 代码块 ---- */
+.post-body pre{
+  background:var(--surface-container-high); color:var(--on-surface);
+  padding:14px 16px; border-radius:var(--radius-card); overflow-x:auto;
+  font-size:13.5px; line-height:1.65; font-family:var(--mono);
+}
+.post-body strong{font-weight:700}
+.post-body code{font-family:var(--mono); font-size:.92em}
+.post-body :not(pre) > code{
+  background:var(--surface-container-high); padding:2px 6px; border-radius:8px;
+}
+.post-body figure.highlight{margin:16px 0; background:var(--surface-container-high);
+  border-radius:var(--radius-card); overflow:hidden; font-size:13.5px; line-height:1.65}
+.post-body figure.highlight table{display:table; width:100%; border-collapse:collapse; margin:0; font-size:inherit}
+.post-body figure.highlight td{border:0; padding:0; vertical-align:top}
+.post-body figure.highlight pre{background:none; border-radius:0; padding:14px 16px; margin:0; font-size:13.5px}
+.post-body figure.highlight .gutter{width:1%; user-select:none;
+  background:color-mix(in srgb, var(--on-surface) 5%, transparent)}
+.post-body figure.highlight .gutter pre{padding:14px 10px; text-align:right;
+  color:var(--on-surface-actions); opacity:1}
+.post-body figure.highlight .line{display:inline-block; width:100%}
+
+/* 语法着色 (跟着 primary 走, 保持 Miuix 的克制) */
+:root{--syn-key:#8250df; --syn-str:#0a7b3e; --syn-num:#b35900; --syn-lit:#0550ae; --syn-com:#8C93B0; --syn-title:#953800}
+html[data-theme="dark"]{--syn-key:#d2a8ff; --syn-str:#7ee787; --syn-num:#ffab70; --syn-lit:#79c0ff; --syn-com:#787E96; --syn-title:#ffa657}
+.post-body .keyword,.post-body .selector-tag{color:var(--syn-key)}
+.post-body .string,.post-body .attr,.post-body .meta-string,.post-body .regexp{color:var(--syn-str)}
+.post-body .number{color:var(--syn-num)}
+.post-body .literal,.post-body .built_in,.post-body .type{color:var(--syn-lit)}
+.post-body .title,.post-body .function .title,.post-body .section{color:var(--syn-title)}
+.post-body .comment,.post-body .quote{color:var(--syn-com); font-style:italic}
+
+/* 标题锚点 */
+.post-body .headerlink{opacity:0; margin-inline-start:6px; font-weight:400; color:var(--on-surface-actions)}
+.post-body .headerlink::before{content:"#"}
+.post-body h1:hover .headerlink,.post-body h2:hover .headerlink,
+.post-body h3:hover .headerlink,.post-body h4:hover .headerlink{opacity:1}
+
+/* ============================ 其它 ============================ */
+.pager{display:flex; gap:8px; margin-top:16px; flex-wrap:wrap}
+.pager .btn{font-size:15px; min-height:36px}
+
+.foot{max-width:var(--maxw); margin:0 auto; padding:20px 16px 56px;
+  font-size:11px; color:var(--on-background-variant); text-align:center}   /* Footnote2 */
+
+.totop{
+  position:fixed; right:18px; bottom:18px; z-index:60;
+  width:52px; height:52px; border:0; border-radius:var(--radius-icon); cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--primary); color:var(--on-primary);
+  box-shadow:0 2px 10px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+.totop[hidden]{display:none}
+.totop:hover{background:var(--primary-variant)}
+
+.paginator{display:flex; gap:8px; justify-content:center; margin:20px 0 0; flex-wrap:wrap}
+.paginator a,.paginator span{display:inline-flex; align-items:center; min-height:36px;
+  padding:0 14px; border-radius:var(--radius-btn); font-size:15px;
+  background:var(--secondary-variant); color:var(--on-secondary-variant)}
+.paginator .page-number.current{background:var(--primary); color:var(--on-primary)}
+
+/* 归档页: Miuix 列表风格 —— 白底圆角块 + 0.75dp 内缩分隔线 */
+.list{background:var(--surface-container); border-radius:var(--radius-card); overflow:hidden}
+.list-item{display:block; padding:14px 18px; color:var(--on-surface-container)}
+.list-item + .list-item{box-shadow:inset 0 var(--divider-w) 0 var(--divider)}
+.list-item:hover{background:var(--surface-container-high); text-decoration:none}
+.list-item-title{font-size:17px}
+.list-item-meta{font-size:13px; color:var(--on-background-variant); margin-top:2px}
+
+@media(max-width:560px){
+  .ab-bar-title{display:none}
+  .navlink{padding:0 10px; font-size:15px}
+  .ab-large{padding-inline:18px}
+  .ab-bar{padding-left:18px; padding-right:12px}
+  .ab-large-title{font-size:28px}
+  .article{padding:18px 16px 24px}
+  .article-title{font-size:26px}
+}

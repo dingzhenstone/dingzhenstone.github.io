@@ -1,0 +1,18 @@
+<section class="cards">
+  <% page.posts.each(function(post){ %>
+    <a class="card" href="<%- url_for(post.path) %>">
+      <h2 class="card-title"><%= post.title %></h2>
+      <p class="card-meta"><%= date(post.date, 'YYYY-MM-DD') %><% if (post.categories && post.categories.length) { %> · <%= post.categories.map(function(c){return c.name}).join(' / ') %><% } %></p>
+      <%
+        // 摘要取正文第一个段落, 避免把标题文字(如"背景")接进来
+        var m = (post.content || '').match(/<p>([\s\S]*?)<\/p>/);
+        var ex = strip_html(m ? m[1] : (post.excerpt || post.content || '')).trim().slice(0, 110);
+      %>
+      <p class="card-excerpt"><%- ex %><% if (ex.length >= 110) { %>…<% } %></p>
+    </a>
+  <% }) %>
+</section>
+
+<% if (page.total > 1) { %>
+  <div class="paginator"><%- paginator({ prev_text: '上一页', next_text: '下一页' }) %></div>
+<% } %>

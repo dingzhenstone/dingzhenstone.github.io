@@ -1,0 +1,8 @@
+<section class="list">
+  <% page.posts.each(function(post){ %>
+    <a class="list-item" href="<%- url_for(post.path) %>">
+      <div class="list-item-title"><%= post.title %></div>
+      <div class="list-item-meta"><%= date(post.date, 'YYYY-MM-DD') %></div>
+    </a>
+  <% }) %>
+</section>

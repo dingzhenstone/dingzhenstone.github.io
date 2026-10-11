@@ -1,0 +1,20 @@
+<article class="article card">
+  <header>
+    <h1 class="article-title"><%= page.title %></h1>
+    <div class="article-meta">
+      <span class="mi"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 2v4M16 2v4M3 10h18" stroke="currentColor" stroke-width="2" fill="none"/>
+      </svg></span><%= date(page.date, 'YYYY-MM-DD') %>
+      <% if (page.tags && page.tags.length) { %>
+        <% page.tags.each(function(t){ %><a class="chip" href="<%- url_for(t.path) %>"><%= t.name %></a><% }) %>
+      <% } %>
+    </div>
+  </header>
+  <div class="post-body"><%- page.content %></div>
+</article>
+
+<div class="pager">
+  <% if (page.prev) { %><a class="btn" href="<%- url_for(page.prev.path) %>">← <%= page.prev.title %></a><% } %>
+  <% if (page.next) { %><a class="btn" href="<%- url_for(page.next.path) %>"><%= page.next.title %> →</a><% } %>
+</div>
