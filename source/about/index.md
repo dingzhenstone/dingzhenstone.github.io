@@ -12,7 +12,7 @@ date: 2026-10-11 13:00:00
 | CPU | Intel Xeon E3-1270 v5 @ 3.60 GHz（4 核 8 线程） |
 | 主板 | MSI Z170A XPOWER GAMING TITANIUM EDITION |
 | 内存 | 16 GB DDR4-3600（8 GB × 2，双通道） |
-| 显卡 | AMD Radeon RX 580 4 GB |
+| 显卡 | AMD Radeon RX 580 8 GB |
 | 系统盘 | 致钛 Ti600 500 GB（NVMe） |
 | 数据盘 | 希捷 ST1000DM003 1 TB |
 | 系统 | Windows 11 Pro（10.0.26200） |
